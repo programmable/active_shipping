@@ -171,14 +171,15 @@ module ActiveMerchant
                 service_node << XmlNode.new('Description', service.description)
               end
             end
+
+            shipment << XmlNode("DocumentsOnly", true) if options[:documents_only]
             # not implemented:  * Shipment/ShipmentWeight element
             #                   * Shipment/ReferenceNumber element                    
             #                   * Shipment/PickupDate element
             #                   * Shipment/ScheduledDeliveryDate element              
             #                   * Shipment/ScheduledDeliveryTime element              
             #                   * Shipment/AlternateDeliveryTime element              
-            #                   * Shipment/DocumentsOnly element                      
-            
+
             packages.each do |package|
               imperial = ['US','LR','MM'].include?(origin.country_code(:alpha2))
               
@@ -209,17 +210,25 @@ module ActiveMerchant
                   value = ((imperial ? package.lbs : package.kgs).to_f*1000).round/1000.0 # 3 decimals
                   package_weight << XmlNode.new("Weight", [value,0.1].max)
                 end
-              
-                # not implemented:  * Shipment/Package/LargePackageIndicator element
-                #                   * Shipment/Package/ReferenceNumber element
-                #                   * Shipment/Package/PackageServiceOptions element
-                #                   * Shipment/Package/AdditionalHandling element  
+
+
+                # package_node << XmlNode.new('PackageServiceOptions') do |so_node|
+
+                # end
+                package_node << XmlNode.new('LargePackageIndicator', true) if options[:large_package]
+                package_node << XmlNode.new('AdditionalHandling', true) if options[:additional_handling]
+                # not implemented:  * Shipment/Package/ReferenceNumber element
+                #                   * Shipment/Package/AdditionalHandling element
               end
               
             end
-            
-            # not implemented:  * Shipment/ShipmentServiceOptions element
-            #                   * Shipment/RateInformation element
+
+
+            shipment << XmlNode.new("ShipmentServiceOptions") do |so_node|
+              so_node << XmlNode.new('SaturdayPickup', true) if options[:saturday_pickup]
+              so_node << XmlNode.new('SaturdayDelivery', true) if options[:saturday_delivery]
+            end
+            # not implemented:  * Shipment/RateInformation element
             
           end
           
