@@ -141,9 +141,7 @@ module ActiveMerchant
         xml_request = XmlNode.new('RatingServiceSelectionRequest') do |root_node|
           root_node << XmlNode.new('Request') do |request|
             request << XmlNode.new('RequestAction', 'Rate')
-            request << XmlNode.new('RequestOption', 'Shop')
-            # not implemented: 'Rate' RequestOption to specify a single service query
-            # request << XmlNode.new('RequestOption', ((options[:service].nil? or options[:service] == :all) ? 'Shop' : 'Rate'))
+            request << XmlNode.new('RequestOption', (options[:service].nil? ? 'Shop' : 'Rate'))
           end
           
           pickup_type = options[:pickup_type] || :daily_pickup
@@ -164,11 +162,18 @@ module ActiveMerchant
             if options[:shipper] and options[:shipper] != origin
               shipment << build_location_node('ShipFrom', origin, options)
             end
-            
+
+
+            unless options[:service].nil?
+              shipment << XmlNode.new('Service') do |service_node|
+                service = options[:service]
+                service_node << XmlNode.new('Code', service.code)
+                service_node << XmlNode.new('Description', service.description)
+              end
+            end
             # not implemented:  * Shipment/ShipmentWeight element
             #                   * Shipment/ReferenceNumber element                    
-            #                   * Shipment/Service element                            
-            #                   * Shipment/PickupDate element                         
+            #                   * Shipment/PickupDate element
             #                   * Shipment/ScheduledDeliveryDate element              
             #                   * Shipment/ScheduledDeliveryTime element              
             #                   * Shipment/AlternateDeliveryTime element              
