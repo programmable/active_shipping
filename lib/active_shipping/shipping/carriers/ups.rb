@@ -172,7 +172,7 @@ module ActiveMerchant
               end
             end
 
-            shipment << XmlNode.new("DocumentsOnly", true) if options[:documents_only]
+            shipment << XmlNode.new("DocumentsOnly") if options[:documents_only]
             # not implemented:  * Shipment/ShipmentWeight element
             #                   * Shipment/ReferenceNumber element                    
             #                   * Shipment/PickupDate element
@@ -215,8 +215,8 @@ module ActiveMerchant
                 # package_node << XmlNode.new('PackageServiceOptions') do |so_node|
 
                 # end
-                package_node << XmlNode.new('LargePackageIndicator', true) if options[:large_package]
-                package_node << XmlNode.new('AdditionalHandling', true) if options[:additional_handling]
+                package_node << XmlNode.new('LargePackageIndicator') if options[:large_package]
+                package_node << XmlNode.new('AdditionalHandling') if options[:additional_handling]
                 # not implemented:  * Shipment/Package/ReferenceNumber element
                 #                   * Shipment/Package/AdditionalHandling element
               end
@@ -225,8 +225,8 @@ module ActiveMerchant
 
 
             shipment << XmlNode.new("ShipmentServiceOptions") do |so_node|
-              so_node << XmlNode.new('SaturdayPickup', true) if options[:saturday_pickup]
-              so_node << XmlNode.new('SaturdayDelivery', true) if options[:saturday_delivery]
+              so_node << XmlNode.new('SaturdayPickup') if options[:saturday_pickup]
+              so_node << XmlNode.new('SaturdayDelivery') if options[:saturday_delivery]
             end
             # not implemented:  * Shipment/RateInformation element
             
