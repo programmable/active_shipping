@@ -172,7 +172,7 @@ module ActiveMerchant
               end
             end
 
-            shipment << XmlNode("DocumentsOnly", true) if options[:documents_only]
+            shipment << XmlNode.new("DocumentsOnly", true) if options[:documents_only]
             # not implemented:  * Shipment/ShipmentWeight element
             #                   * Shipment/ReferenceNumber element                    
             #                   * Shipment/PickupDate element
