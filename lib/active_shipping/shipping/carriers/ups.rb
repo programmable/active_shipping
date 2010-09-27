@@ -35,22 +35,6 @@ module ActiveMerchant
                       :retail => "04"
               })
 
-      PACKAGE_CODES = HashWithIndifferentAccess.new(
-              {
-                      :unknown => "00",
-                      :letter => "01",
-                      :package => "02",
-                      :tube => "03",
-                      :pak => "04",
-                      :express_box => "21",
-                      :twenty_five_kg => "24",
-                      :ten_kg => "25",
-                      :pallet => "30",
-                      :small_express_box => "2a",
-                      :medium_express_box => "2b",
-                      :large_express_box => "2c",
-              })
-
       PACKAGE_TYPES = {
               "00" => "UNKNOWN",
               "01" => "UPS Letter",
@@ -218,7 +202,7 @@ module ActiveMerchant
 
               shipment << XmlNode.new("Package") do |package_node|
                 package_node << XmlNode.new("PackagingType") do |packaging_type|
-                  (options[:package].nil? ? "02" : PACKAGE_CODES[options[:package]]).tap do |code|
+                  (options[:package].nil? ? "02" : options[:package]).tap do |code|
                     packaging_type << XmlNode.new("Code", code)
                     packaging_type << XmlNode.new("Description", PACKAGE_TYPES[code])
                   end
